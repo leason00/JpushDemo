@@ -53,13 +53,13 @@ public class MyReceiver extends BroadcastReceiver {
         	
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             Log.d(TAG, "[MyReceiver] 用户点击打开了通知");
-            
+            handlingNotificationOpen(context, intent);
         	//打开自定义的Activity
-        	Intent i = new Intent(context, TestActivity.class);
-        	i.putExtras(bundle);
+        	//Intent i = new Intent(context, TestActivity.class);
+        	//i.putExtras(bundle);
         	//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        	i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
-        	context.startActivity(i);
+        	//i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
+        	//context.startActivity(i);
         	
         } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
             Log.d(TAG, "[MyReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
@@ -130,4 +130,22 @@ public class MyReceiver extends BroadcastReceiver {
 		notificationManager.notify(2, notification.build());
 
 	}
+	private void handlingNotificationOpen(Context context, Intent intent) {
+		//String title = intent.getStringExtra(JPushInterface.EXTRA_NOTIFICATION_TITLE);
+		//JPushPlugin.openNotificationTitle = title;
+
+		//String alert = intent.getStringExtra(JPushInterface.EXTRA_ALERT);
+		//JPushPlugin.openNotificationAlert = alert;
+
+		//Map<String, Object> extras = getNotificationExtras(intent);
+		//JPushPlugin.openNotificationExtras = extras;
+
+		//JPushPlugin.transmitNotificationOpen(title, alert, extras);
+
+		Intent launch = context.getPackageManager().getLaunchIntentForPackage(
+			context.getPackageName());
+		launch.addCategory(Intent.CATEGORY_LAUNCHER);
+		launch.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		context.startActivity(launch);
+	 }
 }
